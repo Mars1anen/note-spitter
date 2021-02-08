@@ -1,4 +1,7 @@
 import { Injectable } from '@angular/core';
+import { fromEvent, Observable, Subject } from 'rxjs';
+import { takeUntil, tap } from 'rxjs/operators';
+import { CanvasButton } from '../models';
 
 @Injectable({
     providedIn: 'root'
@@ -15,6 +18,10 @@ export class CanvasHelperService {
     };;
 
     constructor() { }
+
+    clearCanvas() {
+        this.cx.clearRect(0, 0, this.width, this.height);
+    }
 
     drawMiddleGuides() {
             this.cx.beginPath();
@@ -60,6 +67,21 @@ export class CanvasHelperService {
         this.cx.fillRect(buttonCenterX + buttonSize / 16, buttonCenterY - buttonSize / 4, buttonSize / 8, buttonSize / 2);
     }
 
+    drawButton(button: CanvasButton) {
+        const buttonCenterX = button.centerX;
+        const buttonCenterY = button.centerY;
+        const radius = button.radius;
+        const buttonSize = radius * 2;
+        this.cx.fillStyle = '#ffffff';
+        this.cx.beginPath();
+        this.cx.arc(buttonCenterX, buttonCenterY, radius, 0, Math.PI * 2, true);
+        this.cx.fill();
+        this.cx.stroke();
+        this.cx.fillStyle = '#000000';
+        this.cx.fillRect(buttonCenterX - buttonSize / 6, buttonCenterY - buttonSize / 4, buttonSize / 8, buttonSize / 2);
+        this.cx.fillRect(buttonCenterX + buttonSize / 16, buttonCenterY - buttonSize / 4, buttonSize / 8, buttonSize / 2);
+    }
+
     drawText(note: string, fontSize: number) {
         if (!this.cx) {
             console.error(`Rendering context not set`);
@@ -72,9 +94,32 @@ export class CanvasHelperService {
         }
     }
 
-    setCurrentContext(cx: CanvasRenderingContext2D, height: number, width: number) {
-        this.cx = cx;
+    checkClicks(obs: Observable<Event>, buttons: CanvasButton[]) {
+        obs
+    }
+
+    setCurrentContext(
+        canvas: HTMLCanvasElement,
+        height: number,
+        width: number,
+        buttons: CanvasButton[]
+    ): Subject<any> {
+        const teardown$ = new Subject();
+        const subject$ = new Subject<MouseEvent>();
+        fromEvent<MouseEvent>(canvas, 'click').subscribe(subject$);
+        subject$.pipe(
+            takeUntil(teardown$)
+        ).subscribe((event: MouseEvent) => buttons.forEach(btn => btn.checkIfButtonClicked(event)));
+        this.checkClicks(subject$.asObservable(), buttons);
+        const cx = canvas.getContext('2d');
+        if (cx) {
+            this.cx = cx;
+        } else {
+            throw new Error('Failed to initialize canvas');
+        }
         this.height = height;
         this.width = width;
+        buttons.forEach(btn => this.drawButton(btn));
+        return teardown$;
     }
 }

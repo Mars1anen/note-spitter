@@ -1,0 +1,25 @@
+export abstract class CanvasButton {
+    constructor(
+        public centerX: number,
+        public centerY: number,
+        public radius: number,
+        private handler: () => any
+    ) { };
+
+    abstract drawInsides(): void;
+
+    public checkIfButtonClicked(event: MouseEvent) {
+        const x = event.clientX;
+        const y = event.clientY;
+        const bX1 = this.centerX - this.radius;
+        const bX2 = this.centerX + this.radius;
+        const bY1 = this.centerY - this.radius;
+        const bY2 = this.centerY + this.radius;
+        if (
+            x > bX1 && x < bX2
+            && y > bY1 && y < bY2
+        ) {
+            this.handler();
+        }
+    }
+}
