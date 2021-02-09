@@ -5,7 +5,7 @@ export class NextButton extends CanvasButton {
   centerX: number;
   centerY: number;
   constructor(canvasSize: { x: number; y: number }) {
-    super(canvasSize.x - 50, canvasSize.y / 2 - 20, 20, () =>
+    super('nextBtn', canvasSize.x - 50, canvasSize.y / 2 - 20, 20, () =>
       console.log('Next clicked')
     );
     this.buttonSize = 20 * 2;

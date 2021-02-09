@@ -5,7 +5,9 @@ export class PauseButton extends CanvasButton {
   centerX: number;
   centerY: number;
   constructor(canvasSize: { x: number; y: number }) {
-    super(50, canvasSize.y / 2 - 20, 20, () => console.log('Pause clicked'));
+    super('pauseBtn', 50, canvasSize.y / 2 - 20, 20, () =>
+      console.log('Pause clicked')
+    );
     this.buttonSize = 20 * 2;
     this.centerX = 50;
     this.centerY = canvasSize.y / 2 - 20;

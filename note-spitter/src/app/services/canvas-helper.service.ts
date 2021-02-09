@@ -38,7 +38,6 @@ export class CanvasHelperService {
     const buttonCenterX = button.centerX;
     const buttonCenterY = button.centerY;
     const radius = button.radius;
-    const buttonSize = radius * 2;
     this.cx.fillStyle = '#ffffff';
     this.cx.beginPath();
     this.cx.arc(buttonCenterX, buttonCenterY, radius, 0, Math.PI * 2, true);
@@ -48,6 +47,7 @@ export class CanvasHelperService {
   }
 
   drawText(note: string, fontSize: number) {
+    this.clearCanvas();
     if (!this.cx) {
       console.error(`Rendering context not set`);
     } else {
@@ -56,10 +56,6 @@ export class CanvasHelperService {
       this.cx.textBaseline = 'middle';
       this.cx.fillText(`${note}`, this.centerX, this.centerY, this.width);
     }
-  }
-
-  checkClicks(obs: Observable<Event>, buttons: CanvasButton[]) {
-    obs;
   }
 
   setCurrentContext(
@@ -76,7 +72,6 @@ export class CanvasHelperService {
       .subscribe((event: MouseEvent) =>
         buttons.forEach((btn) => btn.checkIfButtonClicked(event))
       );
-    this.checkClicks(subject$.asObservable(), buttons);
     const cx = canvas.getContext('2d');
     if (cx) {
       this.cx = cx;

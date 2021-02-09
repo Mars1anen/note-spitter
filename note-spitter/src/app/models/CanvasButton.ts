@@ -1,10 +1,15 @@
-export abstract class CanvasButton {
+import { CanvasElement } from './CanvasElement';
+
+export abstract class CanvasButton extends CanvasElement {
   constructor(
+    name: string,
     public centerX: number,
     public centerY: number,
     public radius: number,
     private handler: () => any
-  ) {}
+  ) {
+    super(name);
+  }
 
   public abstract drawInsides(cx: CanvasRenderingContext2D): void;
 
