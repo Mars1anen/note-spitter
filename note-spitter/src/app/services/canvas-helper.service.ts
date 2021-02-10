@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { fromEvent, Observable, Subject } from 'rxjs';
 import { takeUntil, tap } from 'rxjs/operators';
-import { CanvasButton } from '../models';
+import { CanvasButton, CanvasElements } from '../models';
 import { DrawQueueService } from './draw-queue.service';
 
 @Injectable({
@@ -37,7 +37,7 @@ export class CanvasHelperService {
             this.cx.lineTo(this.width / 2, this.height);
             this.cx.stroke();
         }).bind(this);
-        this.queueService.queueDelayedDraw('middleGuides', fnct);
+        this.queueService.queueDelayedDraw(CanvasElements.MIDDLE_GUIDES, fnct);
     }
 
     drawButton(button: CanvasButton) {
@@ -62,7 +62,7 @@ export class CanvasHelperService {
             this.cx.textBaseline = 'middle';
             this.cx.fillText(`${note}`, this.centerX, this.centerY, this.width);
         }).bind(this, note);
-        this.queueService.queueDelayedDraw('note', fnct);
+        this.queueService.queueDelayedDraw(CanvasElements.NOTES, fnct);
     }
 
     setCurrentContext(

@@ -56,18 +56,8 @@ export class CanvasComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   drawTest(note: string) {
-    // this.clear();
-    const buttonSize = 40;
-    const fontSize = 160;
-
-    this.canvasService.drawText(note, fontSize);
-    // this.canvasService.drawMiddleGuides();
-    // this.canvasService.dPause(buttonSize);
-    // this.canvasService.dNext(buttonSize);
-  }
-
-  private clear() {
-    this.canvasService.clearCanvas();
+    this.canvasService.drawText(note, 160);
+    this.canvasService.drawMiddleGuides();
   }
 
   private setUpButtons(): void {

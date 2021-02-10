@@ -10,7 +10,7 @@ export class PauseButton extends CanvasButton {
     );
     this.buttonSize = 20 * 2;
     this.centerX = 50;
-    this.centerY = canvasSize.y / 2 - 20;
+    this.centerY = canvasSize.y / 2;
   }
 
   drawInsides(cx: CanvasRenderingContext2D) {
