@@ -64,7 +64,7 @@ export class CanvasComponent implements OnInit, AfterViewInit, OnDestroy {
   private setUpButtons(): void {
     this.buttons = [
       new PauseButton({ x: this.width, y: this.height }, this.notesGenerator),
-      new NextButton({ x: this.width, y: this.height }),
+      new NextButton({ x: this.width, y: this.height }, this.notesGenerator),
     ];
   }
 }

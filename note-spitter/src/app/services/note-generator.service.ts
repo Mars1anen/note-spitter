@@ -52,7 +52,7 @@ export class NoteGeneratorService {
     }
 
     nextEmission() {
-        // TODO
+        this.internalTimer$.next(100);
     }
 
     pauseTimer() {
