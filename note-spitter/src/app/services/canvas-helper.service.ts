@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
 import { fromEvent, Observable, Subject } from 'rxjs';
 import { takeUntil, tap } from 'rxjs/operators';
+
 import { CanvasButton, CanvasElements } from '../models';
 import { DrawQueueService } from './draw-queue.service';
+import { NoteGeneratorService } from './note-generator.service';
 
 @Injectable({
     providedIn: 'root',
@@ -19,25 +21,12 @@ export class CanvasHelperService {
     }
 
     constructor(
+        private notesGenerator: NoteGeneratorService,
         private queueService: DrawQueueService
     ) { }
-    
+
     clearCanvas() {
         this.cx.clearRect(0, 0, this.width, this.height);
-    }
-
-    drawMiddleGuides() {
-        const fnct = (() => {
-            this.cx.beginPath();
-            this.cx.moveTo(0, this.centerY);
-            this.cx.lineTo(this.width, this.centerY);
-            this.cx.stroke();
-            this.cx.beginPath();
-            this.cx.moveTo(this.width / 2, 0);
-            this.cx.lineTo(this.width / 2, this.height);
-            this.cx.stroke();
-        }).bind(this);
-        this.queueService.queueDelayedDraw(CanvasElements.MIDDLE_GUIDES, fnct);
     }
 
     drawButton(button: CanvasButton) {
@@ -53,6 +42,36 @@ export class CanvasHelperService {
             button.drawInsides(this.cx);
         }).bind(this);
         this.queueService.queueDelayedDraw(button.name, fn);
+    }
+
+    drawLoader(width: number) {
+        const fnct = (() => {
+            const fraction = this.notesGenerator.getFractionOfTimePassed();
+            const unfilledColour = '#829FD9';
+            const filledColour = '#230A59';
+            this.cx.fillStyle = unfilledColour;
+            this.cx.beginPath();
+            this.cx.fillRect(this.centerX - width / 2, this.height - 60, width, 10);
+            this.cx.beginPath();
+            this.cx.fillStyle = filledColour;
+            this.cx.fillRect(this.centerX - width / 2, this.height - 60, width * fraction / 100, 10);
+            this.cx.fillStyle = '000000';
+        }).bind(this);
+        this.queueService.queueDelayedDraw(CanvasElements.LOADER, fnct);
+    }
+
+    drawMiddleGuides() {
+        const fnct = (() => {
+            this.cx.beginPath();
+            this.cx.moveTo(0, this.centerY);
+            this.cx.lineTo(this.width, this.centerY);
+            this.cx.stroke();
+            this.cx.beginPath();
+            this.cx.moveTo(this.width / 2, 0);
+            this.cx.lineTo(this.width / 2, this.height);
+            this.cx.stroke();
+        }).bind(this);
+        this.queueService.queueDelayedDraw(CanvasElements.MIDDLE_GUIDES, fnct);
     }
 
     drawText(note: string, fontSize: number) {

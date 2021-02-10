@@ -19,13 +19,17 @@ import { Notes } from '../models';
 })
 export class NoteGeneratorService {
     emitter$ = new ReplaySubject(1);
-    fractionEmitter$ = new Subject<number>();
+    fraction: number = 0;
     internalTimer$: Observable<any>;
     interval: number = 5000;
     lastEmissionTS: number = 0;
+    private fractionEmitter$ = new Subject<number>();
     constructor() {
         this.setUpFractionEmitter();
         this.newInterval(this.interval);
+        this.fractionEmitter$.asObservable().pipe(
+            tap(fraction => this.fraction = fraction)
+        ).subscribe();
     }
 
     newInterval(itrl: number) {
@@ -34,8 +38,8 @@ export class NoteGeneratorService {
         this.internalTimer$.subscribe(this.emitter$);
     }
 
-    getFractionOfTimePassed() {
-        return this.fractionEmitter$.asObservable();
+    getFractionOfTimePassed(): number {
+        return this.fraction;
     }
     
     getRandomizedNotesStream(): Observable<any> {

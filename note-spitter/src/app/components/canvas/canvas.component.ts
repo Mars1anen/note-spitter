@@ -27,6 +27,7 @@ export class CanvasComponent implements OnInit, AfterViewInit, OnDestroy {
 
   buttons: CanvasButton[] = [];
   clearSubs$: Subject<MouseEvent>;
+  fontSize = 160;
   initialized = false;
 
   @ViewChild('canvas') canvas: ElementRef<HTMLCanvasElement>;
@@ -38,6 +39,7 @@ export class CanvasComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnInit(): void {}
 
   ngAfterViewInit() {
+    this.canvasService.drawLoader(this.fontSize);
     this.setUpButtons();
     this.clearSubs$ = this.canvasService.setCurrentContext(
       this.canvas.nativeElement,
@@ -56,7 +58,7 @@ export class CanvasComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   drawTest(note: string) {
-    this.canvasService.drawText(note, 160);
+    this.canvasService.drawText(note, this.fontSize);
   }
 
   private setUpButtons(): void {
