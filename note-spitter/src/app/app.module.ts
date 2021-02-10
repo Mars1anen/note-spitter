@@ -3,13 +3,13 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { CanvasZoneComponent } from './components/canvas-zone/canvas-zone.component';
+import { MainScreenComponent } from './components/main-screen/main-screen.component';
 import { CanvasComponent } from './components/canvas/canvas.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    CanvasZoneComponent,
+    MainScreenComponent,
     CanvasComponent
   ],
   imports: [

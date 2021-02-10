@@ -51,8 +51,13 @@ export class NoteGeneratorService {
             );
     }
 
+    isPaused() {
+        return this.timePaused;
+    }
+    
     nextEmission() {
         this.internalTimer$.next(100);
+        this.unpauseTimer();
     }
 
     pauseTimer() {

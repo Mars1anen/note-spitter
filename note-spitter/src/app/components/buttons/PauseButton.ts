@@ -5,18 +5,15 @@ export class PauseButton extends CanvasButton {
     buttonSize: number;
     centerX: number;
     centerY: number;
-    paused = false;
     constructor(
         canvasSize: { x: number; y: number },
         private noteGenerator: NoteGeneratorService
     ) {
         super('pauseBtn', 50, canvasSize.y / 2 - 20, 20, () => {
-            if (!this.paused) {
+            if (!this.noteGenerator.isPaused()) {
                 this.noteGenerator.pauseTimer();
-                this.paused = true;
             } else {
                 this.noteGenerator.unpauseTimer();
-                this.paused = false;
             }
         });
         this.buttonSize = 20 * 2;
@@ -26,7 +23,7 @@ export class PauseButton extends CanvasButton {
 
     drawInsides(cx: CanvasRenderingContext2D) {
         cx.fillStyle = '#000000';
-        if (!this.paused) {
+        if (!this.noteGenerator.isPaused()) {
             cx.fillRect(
                 this.centerX - this.buttonSize / 6,
                 this.centerY - this.buttonSize / 4,
