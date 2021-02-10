@@ -1,5 +1,7 @@
-<div class="canvas" [style.height.px]="canvasHeight" [style.width.px]="canvasWidth">
-    <ns-canvas 
-        [height]="canvasHeight"
-        [width]="canvasWidth"></ns-canvas>
+<div class="canvas">
+    <div class="canvas__inner" [style.marginTop]="-(canvasHeight / 2)">
+        <ns-canvas 
+            [height]="canvasHeight"
+            [width]="canvasWidth"></ns-canvas>
+    </div>
 </div>
