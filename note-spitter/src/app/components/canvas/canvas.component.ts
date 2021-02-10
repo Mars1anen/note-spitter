@@ -57,7 +57,6 @@ export class CanvasComponent implements OnInit, AfterViewInit, OnDestroy {
 
   drawTest(note: string) {
     this.canvasService.drawText(note, 160);
-    this.canvasService.drawMiddleGuides();
   }
 
   private setUpButtons(): void {

@@ -56,6 +56,7 @@ export class CanvasHelperService {
     }
 
     drawText(note: string, fontSize: number) {
+        console.log(`Drawing text: notes is - ${note}`)
         const fnct = ((text: string) => {
             this.cx.font = `${fontSize}px serif`;
             this.cx.textAlign = 'center';
@@ -71,6 +72,9 @@ export class CanvasHelperService {
         width: number,
         buttons: CanvasButton[]
     ): Subject<any> {
+        /**
+         * A way to kill current canvas instance after component death
+         */
         const teardown$ = new Subject();
         const subject$ = new Subject<MouseEvent>();
         fromEvent<MouseEvent>(canvas, 'click').subscribe(subject$);
