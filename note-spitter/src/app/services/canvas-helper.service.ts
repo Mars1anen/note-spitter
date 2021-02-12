@@ -48,6 +48,18 @@ export class CanvasHelperService {
         this.queueService.queueDelayedDraw(button.name, fn);
     }
 
+    drawFretboard() {
+        const img = new Image();
+        const drawFn = (() => {
+            this.cx.drawImage(img, 0, 0, 1000, 420);
+            console.log('Image loaded');
+        }).bind(this);
+        img.onload = () => {
+            this.queueService.queueDelayedDraw('fretboard', drawFn);
+        };
+        img.src = '../assets/images/fretboard.svg';
+    }
+
     drawLoader(width: number) {
         const fnct = (() => {
             const fraction = this.notesGenerator.getFractionOfTimePassed();
