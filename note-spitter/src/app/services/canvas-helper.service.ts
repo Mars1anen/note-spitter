@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { fromEvent, Observable, Subject } from 'rxjs';
-import { takeUntil, tap } from 'rxjs/operators';
+import { BehaviorSubject, fromEvent, Observable, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
-import { CanvasButton, CanvasElements } from '../models';
+import { CanvasButton, CanvasElements, Dimensions } from '../models';
 import { DrawQueueService } from './draw-queue.service';
 import { NoteGeneratorService } from './note-generator.service';
 
@@ -10,9 +10,11 @@ import { NoteGeneratorService } from './note-generator.service';
     providedIn: 'root',
 })
 export class CanvasHelperService {
-    cx: CanvasRenderingContext2D;
-    height: number;
-    width: number;
+    private canvasClick$: Subject<MouseEvent>;
+    private cx: CanvasRenderingContext2D;
+    private height: number;
+    private initialized$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+    private width: number;
     get centerY() {
         return this.height / 2;
     }
@@ -30,6 +32,8 @@ export class CanvasHelperService {
     }
 
     drawButton(button: CanvasButton) {
+        this.canvasClick$.asObservable()
+            .subscribe((event) => button.checkIfButtonClicked(event));
         const fn = (() => {
             const buttonCenterX = button.centerX;
             const buttonCenterY = button.centerY;
@@ -85,33 +89,41 @@ export class CanvasHelperService {
         this.queueService.queueDelayedDraw(CanvasElements.NOTES, fnct);
     }
 
+    getCanvasDimensions(): Dimensions {
+        return {
+            height: this.height,
+            width: this.width
+        };
+    }
+
+    isCanvasReady(): Observable<boolean> {
+        return this.initialized$.asObservable();
+    }
+
     setCurrentContext(
         canvas: HTMLCanvasElement,
         height: number,
         width: number,
-        buttons: CanvasButton[]
     ): Subject<any> {
         /**
          * A way to kill current canvas instance after component death
          */
         const teardown$ = new Subject();
-        const subject$ = new Subject<MouseEvent>();
-        fromEvent<MouseEvent>(canvas, 'click').subscribe(subject$);
-        subject$
+        this.canvasClick$ = new Subject<MouseEvent>();
+        fromEvent<MouseEvent>(canvas, 'click')
             .pipe(takeUntil(teardown$))
-            .subscribe((event: MouseEvent) =>
-                buttons.forEach((btn) => btn.checkIfButtonClicked(event))
-            );
+            .subscribe(this.canvasClick$);
         const cx = canvas.getContext('2d');
+        this.height = height;
+        this.width = width;
         if (cx) {
             this.cx = cx;
+            this.startDrawingLoop();
+            this.initialized$.next(true);
         } else {
             throw new Error('Failed to initialize canvas');
         }
-        this.height = height;
-        this.width = width;
-        buttons.forEach(btn => this.drawButton(btn));
-        this.startDrawingLoop();
+        // buttons.forEach(btn => this.drawButton(btn));
         return teardown$;
     }
 

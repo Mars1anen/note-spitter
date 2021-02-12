@@ -1,0 +1,8 @@
+@import 'variables';
+
+.canvas {
+    &__wrapper {
+        border-top: 3px solid $almost-black;
+        border-bottom: 3px solid $almost-black;
+    }
+}

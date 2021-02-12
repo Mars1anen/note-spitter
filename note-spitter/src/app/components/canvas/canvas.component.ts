@@ -1,70 +1,47 @@
 import {
-  Component,
-  OnInit,
-  ChangeDetectionStrategy,
-  Input,
-  ViewChild,
-  AfterViewInit,
-  ElementRef,
-  OnDestroy,
+    Component,
+    OnInit,
+    ChangeDetectionStrategy,
+    ViewChild,
+    ElementRef,
+    AfterViewInit,
+    OnDestroy,
+    Input
 } from '@angular/core';
 import { Subject } from 'rxjs';
-import { CanvasButton } from '../../models';
+
 import { CanvasHelperService } from '../../services/canvas-helper.service';
-import { NoteGeneratorService } from '../../services/note-generator.service';
-import { NextButton } from '../buttons/NextButton';
-import { PauseButton } from '../buttons/PauseButton';
 
 @Component({
-  selector: 'ns-canvas',
-  templateUrl: './canvas.component.html',
-  styleUrls: ['./canvas.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'ns-canvas',
+    templateUrl: './canvas.component.html',
+    styleUrls: ['./canvas.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CanvasComponent implements OnInit, AfterViewInit, OnDestroy {
-  @Input() height: number;
-  @Input() width: number;
+    @Input('canvasHeight') height: number = 500;
+    @Input('canvasWidth') width: number = 1000;
 
-  buttons: CanvasButton[] = [];
-  clearSubs$: Subject<MouseEvent>;
-  fontSize = 160;
-  initialized = false;
+    clearSubs$: Subject<MouseEvent>;
+    initialized = false;
 
-  @ViewChild('canvas') canvas: ElementRef<HTMLCanvasElement>;
-  constructor(
-    private canvasService: CanvasHelperService,
-    private notesGenerator: NoteGeneratorService
-  ) {}
+    @ViewChild('canvas') canvas: ElementRef<HTMLCanvasElement>;
+    constructor(
+        private canvasService: CanvasHelperService
+    ) { }
 
-  ngOnInit(): void {}
+    ngOnInit(): void {}
 
-  ngAfterViewInit() {
-    this.canvasService.drawLoader(this.fontSize);
-    this.setUpButtons();
-    this.clearSubs$ = this.canvasService.setCurrentContext(
-      this.canvas.nativeElement,
-      this.height,
-      this.width,
-      this.buttons
-    );
-    this.initialized = true;
-    this.notesGenerator
-      .getRandomizedNotesStream()
-      .subscribe((note) => this.drawTest(`${note}`));
-  }
+    ngAfterViewInit() {
+        this.initialized = true;
+        this.clearSubs$ = this.canvasService.setCurrentContext(
+            this.canvas.nativeElement,
+            this.height,
+            this.width
+        );
+    }
 
-  ngOnDestroy() {
-    this.clearSubs$.next();
-  }
-
-  drawTest(note: string) {
-    this.canvasService.drawText(note, this.fontSize);
-  }
-
-  private setUpButtons(): void {
-    this.buttons = [
-      new PauseButton({ x: this.width, y: this.height }, this.notesGenerator),
-      new NextButton({ x: this.width, y: this.height }, this.notesGenerator),
-    ];
-  }
+    ngOnDestroy() {
+        this.clearSubs$.next();
+    }
 }

@@ -1,8 +1,16 @@
 <div class="app">
     <h1 class="app__title">Notes Spitter</h1>
-    <div class="app__inner" [style.marginTop]="-(canvasHeight / 2)">
-        <ns-canvas 
-            [height]="canvasHeight"
-            [width]="canvasWidth"></ns-canvas>
+    <div [style.width.px]="canvasWidth">
+        <ns-select-mode [activeMode]="activeMode" (modeChange)="changeAppMode($event)"></ns-select-mode>
     </div>
-</div>
+    <router-outlet></router-outlet>
+    <ns-canvas
+        [canvasHeight]="canvasHeight"
+        [canvasWidth]="canvasWidth"></ns-canvas>
+    <!-- <div class="app__inner" [style.marginTop]="-(canvasHeight / 2)">
+        <ns-note-spitter 
+            [height]="canvasHeight"
+            [width]="canvasWidth"></ns-note-spitter>
+    </div> -->
+</div> 
+{{activeMode}}

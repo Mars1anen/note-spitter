@@ -1,3 +1,4 @@
+@import '_variables';
 
 .app {
     display: flex;
@@ -10,6 +11,8 @@
     &__title {
         margin-top: 100px;
         font-size: 82px;
+        font-family: $heading-font;
+        font-weight: 400;
     }
 
     &__inner {  
