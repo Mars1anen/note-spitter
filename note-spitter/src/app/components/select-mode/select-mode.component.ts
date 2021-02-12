@@ -9,12 +9,6 @@ import { AppModes } from '../../models';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SelectModeComponent implements OnInit {
-    @Input() activeMode: AppModes;
-
-    fretboardTab = AppModes.FRETBOARD;
-    noteSpitterTab = AppModes.NOTE_SPITTER;
-
-    @Output() modeChange = new EventEmitter<AppModes>()
     constructor() { }
 
     ngOnInit(): void {

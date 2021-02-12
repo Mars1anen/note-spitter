@@ -1,7 +1,7 @@
 <div class="app">
     <h1 class="app__title">Notes Spitter</h1>
     <div [style.width.px]="canvasWidth">
-        <ns-select-mode [activeMode]="activeMode" (modeChange)="changeAppMode($event)"></ns-select-mode>
+        <ns-select-mode></ns-select-mode>
     </div>
     <router-outlet></router-outlet>
     <ns-canvas
@@ -12,5 +12,4 @@
             [height]="canvasHeight"
             [width]="canvasWidth"></ns-note-spitter>
     </div> -->
-</div> 
-{{activeMode}}
+</div>

@@ -1,6 +1,6 @@
 <div class="select-mode">
     <div class="select-mode__menu">
-        <div class="select-mode__menu-tab" [ngClass]="{active: activeMode === noteSpitterTab }">Note Spitter</div>
-        <div class="select-mode__menu-tab" [ngClass]="{active: activeMode === fretboardTab }">Fretboard</div>
+        <div class="select-mode__menu-tab" routerLink="note-spitter" routerLinkActive="active">Note Spitter</div>
+        <div class="select-mode__menu-tab" routerLink="fretboard" routerLinkActive="active">Fretboard</div>
     </div>
 </div>

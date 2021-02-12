@@ -13,7 +13,9 @@ export class DrawQueueService {
     pool: { [key: string]: {(): void}} = {};
     constructor() { }
 
-
+    emptyQueue() {
+        this.pool = {};
+    }
 
     queueDelayedDraw(fName: string, drawingFunc: () => void) {
         this.addToQueue(fName, drawingFunc);

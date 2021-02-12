@@ -11,6 +11,7 @@ import { CanvasHelperService } from '../../services/canvas-helper.service';
 import { NoteGeneratorService } from '../../services/note-generator.service';
 import { NextButton } from '../../components/buttons/NextButton';
 import { PauseButton } from '../../components/buttons/PauseButton';
+import { DrawQueueService } from '../../services/draw-queue.service';
 
 @Component({
     selector: 'ns-note-spitter',
@@ -24,7 +25,8 @@ export class NoteSpitterComponent extends OnDestroyMixin implements OnInit {
     fontSize = 160;
     constructor(
         private canvasService: CanvasHelperService,
-        private notesGenerator: NoteGeneratorService
+        private notesGenerator: NoteGeneratorService,
+        private queueService: DrawQueueService
     ) {
         super();
     }
@@ -42,6 +44,11 @@ export class NoteSpitterComponent extends OnDestroyMixin implements OnInit {
                         .subscribe((note) => this.drawTest(`${note}`));
                 })
             ).subscribe();
+    }
+
+    ngOnDestroy() {
+        super.ngOnDestroy();
+        this.queueService.emptyQueue();
     }
 
     drawTest(note: string) {

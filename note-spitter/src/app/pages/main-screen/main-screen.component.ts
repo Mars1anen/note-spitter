@@ -11,8 +11,6 @@ import { AppModes } from '../../models';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MainScreenComponent extends OnDestroyMixin implements OnInit  {
-    activeMode: AppModes;
-
     canvasHeight: number = 500;
     canvasWidth: number = 1000;
 
@@ -39,7 +37,6 @@ export class MainScreenComponent extends OnDestroyMixin implements OnInit  {
     }
 
     changeAppMode(newMode: AppModes) {
-        this.activeMode = newMode;
         this.navigateToModePage(newMode);
     }
 
